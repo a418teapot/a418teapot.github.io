@@ -1,69 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Player Stats from Excel</title>
-    <!-- 根据实际情况，可选择从 CDN 引入 xlsx 库，或者将库文件随项目一起部署到服务器并使用相对路径引入 -->
-    <script src="xlsx.full.min.js"></script>
-    <!-- 引入自定义的 script.js 文件，这里假设 script.js 和 index.html 在服务器端同一目录下，使用相对路径引入 -->
-    <script src="script.js"></script>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+<meta charset="UTF-8">
+<style>
+table{
+border-collapse: collapse;
+width: 100%;
+}
+th, td{
+text-align: left;
+padding: 8px;
+}
+tr:nth-child(even){
+background-color: #fafafa;
+}
+th{
+background-color: #7799AA;
+color: white;
+}
+</style>
 </head>
-
 <body>
-    <table id="player-stats-table">
-        <thead>
-            <tr>
-                <th scope="col">玩家名称</th>
-                <th scope="col">本服游玩时长(s)(2025年以来)</th>
-                <th scope="col">爆头率</th>
-                <th scope="col">近战击杀数</th>
-                <th scope="col">普通感染者击杀数</th>
-                <th scope="col">特感击杀数</th>
-                <th scope="col">witch击杀数</th>
-                <th scope="col">坦克击杀数</th>
-                <th scope="col">黑枪数</th>
-                <th scope="col">被黑枪数</th>
-                <th scope="col">保护队友次数</th>
-                <th scope="col">救活队友次数</th>
-                <th scope="col">击倒队友次数</th>
-                <th scope="col">击杀队友次数</th>
-                <th scope="col">挂边次数</th>
-                <th scope="col">倒地次数</th>
-                <th scope="col">死亡次数</th>
-                <th scope="col">完成战役次数</th>
-                <th scope="col">团灭次数</th>
-                <th scope="col">砍舌次数</th>
-                <th scope="col">SMOKER自救次数</th>
-        <th scope="col">推开HUNTER次数</th>
-        <th scope="col">击杀冲锋中的charger次数</th>
-        <th scope="col">秒妹次数</th>
-        <th scope="col">打碎石头次数</th>
-        <th scope="col">吃饼次数</th>
-        <th scope="col">触发警报的次数</th>
-            </tr>
-        </thead>
-        <tbody id="player-stats-tbody">
-        </tbody>
-    </table>
+<table>
+<tr><th>玩家名称</th><th>本服游玩时长(s)(2025年以来)</th><th>爆头率</th><th>近战击杀数</th><th>普通感染者击杀数</th><th>特感击杀数</th><th>witch击杀数</th><th>坦克击杀数</th><th>黑枪数</th><th>被黑枪数</th><th>保护队友次数</th><th>救活队友次数</th><th>击倒队友次数</th><th>击杀队友次数</th><th>挂边次数</th><th>倒地次数</th><th>死亡次数</th><th>完成战役次数</th><th>团灭次数</th><th>砍舌次数</th><th>SMOKER自救次数</th><th>推开HUNTER次数</th><th>击杀冲锋中的charger次数</th><th>秒妹次数</th><th>打碎石头次数</th><th>吃饼次数</th><th>触发警报的次数</th></tr>
+</table>
 </body>
-
 </html>
