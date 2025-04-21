@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>系统状态监控</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 15px;
+        }
+
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .system-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>系统监控面板</h2>
+        <div id="status-container"></div>
+        <div id="version-container"></div>
+        <div id="process-container"></div>
+        <div id="instance-container"></div>
+        <div id="system-container"></div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://demo.com/api/service/remote_services_system?apikey=8e4ad2a8ed384659b086241e77067920'; // 替换为实际API地址
+
+        async function fetchData() {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET', // 明确指定请求方法
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest', // 添加必需请求头
+                        'Content-Type': 'application/json; charset=utf-8', // 添加必需请求头
+                    }
+                });
+ 
+                if (!response.ok) {
+                    throw new Error(`HTTP错误! 状态码: ${response.status}`);
+                }
+ 
+                const data = await response.json();
+
+                // 处理API状态码
+                switch(data.status) {
+                    case 200:
+                        displayData(data.data[0]);
+                        break;
+                    case 400:
+                        showError('错误请求：参数不正确');
+                        break;
+                    case 403:
+                        showError('权限不足：请检查API密钥');
+                        break;
+                    case 500:
+                        showError('服务器错误：请稍后重试');
+                        break;
+                    default:
+                        showError('未知错误');
+                }
+            } catch (error) {
+                console.error('请求失败:', error);
+                showError('数据加载失败，请检查网络连接');
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `
+                <div class="status-badge error">
+                    ⚠️ ${message}
+                </div>
+            `;
+        }
+
+        function displayData(data) {
+            // 状态指示
+            const statusContainer = document.getElementById('status-container');
+            statusContainer.innerHTML = `
+                <div class="status-badge success">
+                    ✅ 系统状态正常 (最后更新: ${new Date(data.time).toLocaleString()})
+                </div>
+            `;
+
+            // 版本信息
+            document.getElementById('version-container').innerHTML = `
+                <h3>📦 版本信息</h3>
+                <p>当前版本: <strong>${data.version}</strong></p>
+            `;
+
+            // 进程信息
+            const processHtml = `
+                <h3>💻 进程监控</h3>
+                <div class="metric">
+                    <span>CPU使用率</span>
+                    <span>${(data.process.cpu / 1000000).toFixed(2)}%</span>
+                </div>
+                <div class="metric">
+                    <span>内存使用</span>
+                    <span>${formatBytes(data.process.memory)}</span>
+                </div>
+                <div class="metric">
+                    <span>工作目录</span>
+                    <span>${data.process.cwd}</span>
+                </div>
+            `;
+            document.getElementById('process-container').innerHTML = processHtml;
+
+            // 实例信息
+            document.getElementById('instance-container').innerHTML = `
+                <h3>🌐 实例状态</h3>
+                <p>运行中实例: <strong>${data.instance.running}/${data.instance.total}</strong></p>
+            `;
+
+            // 系统信息
+            const systemHtml = `
+                <h3>🖥️ 系统详情</h3>
+                <div class="system-info">
+                    <div>
+                        <p>系统类型: ${data.system.type}</p>
+                        <p>主机名: ${data.system.hostname}</p>
+                        <p>平台: ${data.system.platform}</p>
+                        <p>系统版本: ${data.system.release}</p>
+                    </div>
+                    <div>
+                        <p>运行时长: ${formatUptime(data.system.uptime)}</p>
+                        <p>工作目录: ${data.system.cwd}</p>
+                        <p>CPU使用率: ${(data.system.cpuUsage * 100).toFixed(1)}%</p>
+                        <p>内存使用率: ${(data.system.memUsage * 100).toFixed(1)}%</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('system-container').innerHTML = systemHtml;
+        }
+
+        // 辅助函数：格式化字节
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 辅助函数：格式化运行时间
+        function formatUptime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${days}天 ${hours}小时 ${minutes}分钟`;
+        }
+
+        // 初始加载
+        fetchData();
+    </script>
+</body>
+</html>
