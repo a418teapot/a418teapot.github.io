@@ -40,9 +40,9 @@
   --highlight-aqua: #479d9d;
   --highlight-blue: #1973b8;
   --highlight-purple: #7135ac;
-  --cursor-default: url("../images/cursor/reimu-cursor-default.png"), auto;
-  --cursor-pointer: url("../images/cursor/reimu-cursor-pointer.png"), pointer;
-  --cursor-text: url("../images/cursor/reimu-cursor-text.png"), text;
+  --cursor-default: url("../images/cursor/baizi-cursor-default.cur"), auto;
+  --cursor-pointer: url("../images/cursor/baizi-cursor-pointer.cur"), pointer;
+  --cursor-text: url("../images/cursor/baizi-cursor-text.cur"), text;
   --footer-icon: url("../images/taichi.png");
   --sponsor-icon: url("../images/taichi.png");
   --top-icon: url("../images/taichi.png");
@@ -484,6 +484,18 @@ body [data-aos='zoom-in'] {
 .ais-pagination--item__next a:before {
   font-family: "iconfont";
   content: "\e630";
+}
+.icon-github:before {
+  content: "\e619";
+}
+.icon-bilibili:before {
+  content: "\e603";
+}
+.icon-steam:before {
+  content: "\e624";
+}
+.icon-email:before {
+  content: "\e63c";
 }
 .sidebar-btn-wrapper .sidebar-toc-btn:before {
   font-family: "iconfont";
@@ -2906,6 +2918,21 @@ pre .javascript .function {
 }
 .sidebar-social-icon:hover {
   transform: scale(1.2);
+}
+.icon-email {
+  color: var(--red-2);
+}
+.icon-github {
+  color: #191717;
+}
+[data-theme="dark"] .icon-github {
+  color: #bc88ff;
+}
+.icon-bilibili {
+  color: #00a1d6;
+}
+.icon-steam {
+  color: #171a21;
 }
 .sidebar-menu-icon,
 .sidebar-menu-link {
